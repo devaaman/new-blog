@@ -25,7 +25,7 @@ router.put("/:id",async (req,res)=>{
 
 
 //DELETE
-router.delete("/:id",verifyToken,async (req,res)=>{
+router.delete("/:id",async (req,res)=>{
     try{
         await User.findByIdAndDelete(req.params.id)
         await Post.deleteMany({userId:req.params.id})
