@@ -8,6 +8,7 @@ const verifyToken = require('../verifyToken')
 
 //CREATE
 router.post("/create",async (req,res)=>{
+    
     try{
         const newPost=new Post(req.body)
         // console.log(req.body)
@@ -15,11 +16,9 @@ router.post("/create",async (req,res)=>{
         
         res.status(200).json(savedPost)
     }
-    catch(err){
-        
+    catch(err){  
         res.status(500).json(err)
-    }
-     
+    }  
 })
 
 //UPDATE
