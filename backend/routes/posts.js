@@ -11,9 +11,7 @@ router.post("/create",async (req,res)=>{
     
     try{
         const newPost=new Post(req.body)
-        // console.log(req.body)
-        const savedPost=await newPost.save()
-        
+        const savedPost=await newPost.save()   
         res.status(200).json(savedPost)
     }
     catch(err){  
@@ -38,15 +36,27 @@ router.put("/:id",async (req,res)=>{
 //DELETE
 router.delete("/:id",async (req,res)=>{
     try{
-        await Post.findByIdAndDelete(req.params.id)
+        const post = await Post.findByIdAndDelete(req.params.id).lean();
         await Comment.deleteMany({postId:req.params.id})
+        deleteImageFromCloudinary(post?.photo);
         res.status(200).json("Post has been deleted!")
-
     }
     catch(err){
         res.status(500).json(err)
     }
 })
+
+const cloudinary = require('./cloudinary');
+async function deleteImageFromCloudinary(publicId) {
+  try {
+    const result = await cloudinary.uploader.destroy(publicId, { invalidate: true });
+    return result;
+  } catch (error) {
+    console.error(`Failed to delete image ${publicId}:`, error.message);
+    throw error;
+  }
+}
+
 
 
 //GET POST DETAILS

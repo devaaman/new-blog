@@ -36,8 +36,7 @@ const PostDetails = () => {
   const handleDeletePost=async ()=>{
 
     try{
-      const res=await axios.delete(URL+"/api/posts/"+postId,{withCredentials:true})
-      console.log(res.data)
+      const res=await axios.delete(URL+"/api/posts/"+postId)
       navigate("/")
 
     }
@@ -75,8 +74,7 @@ const PostDetails = () => {
     e.preventDefault()
     try{
       const res=await axios.post(URL+"/api/comments/create",
-      {comment:comment,author:user.username,postId:postId,userId:user._id},
-      {withCredentials:true})
+      {comment:comment,author:user.username,postId:postId,userId:user._id})
       
       // fetchPostComments()
       // setComment("")
@@ -109,7 +107,7 @@ const PostDetails = () => {
        <p>{new Date(post.updatedAt).toString().slice(16,24)}</p>
        </div>
         </div>
-        <img src={IF+post.photo} className="w-full  mx-auto mt-8" alt=""/>
+        <img src={post.photo} className="w-full  mx-auto mt-8" alt=""/>
          <p className="mx-auto mt-8">{post.desc}</p>
          <div className="flex items-center mt-8 space-x-4 font-semibold">
           <p>Categories:</p>
