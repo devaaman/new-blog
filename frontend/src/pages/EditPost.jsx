@@ -62,7 +62,7 @@ const EditPost = () => {
       //post upload
      
       try{
-        const res=await axios.put(URL+"/api/posts/"+postId,post,{withCredentials:true})
+        const res=await axios.put(URL+"/api/posts/"+postId,post)
         navigate("/posts/post/"+res.data._id)
         // console.log(res.data)
 

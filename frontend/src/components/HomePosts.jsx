@@ -3,11 +3,12 @@ import {IF} from '../url'
 
 
 const HomePosts = ({post}) => {
+  const cloudinaryUrl = post.photo;
   return (
     <div className="w-full flex mt-8 space-x-4">
     {/* left */}
     <div className="w-[35%] h-[200px] flex justify-center items-center">
-    <img src={IF+post.photo} alt="" className="h-full w-full object-cover"/>
+    <img src={cloudinaryUrl} alt="" className="h-full w-full object-cover"/>
     </div>
     {/* right */}
     <div className="flex flex-col w-[65%]">

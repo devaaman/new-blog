@@ -47,11 +47,13 @@ const CreatePost = () => {
           const filename=Date.now()+file.name
           data.append("img",filename)
           data.append("file",file)
-          post.photo=filename
-          // console.log(data)
-          //img upload
+
           try{
             const imgUpload=await axios.post(URL+"/api/upload",data)
+            const url=imgUpload.data.url;
+            post['photo']=url;
+            const res=await axios.post(URL+"/api/posts/create",post)
+            navigate("/posts/post/"+res.data._id)
             // console.log(imgUpload.data)
           }
           catch(err){
@@ -60,15 +62,14 @@ const CreatePost = () => {
         }
         //post upload
         // console.log(post)
-        try{
-          const res=await axios.post(URL+"/api/posts/create",post,{withCredentials:true})
-          navigate("/posts/post/"+res.data._id)
-          // console.log(res.data)
+        // try{
+          
+        //   // console.log(res.data)
 
-        }
-        catch(err){
-          console.log(err)
-        }
+        // }
+        // catch(err){
+        //   console.log(err)
+        // }
     }
 
 

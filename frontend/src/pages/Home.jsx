@@ -22,7 +22,7 @@ const Home = () => {
   const fetchPosts=async()=>{
     setLoader(true)
     try{
-      const res=await axios.get(URL+"/api/posts/"+search)
+      const res=await axios.get(URL+"/api/posts/")
       // console.log(res.data)
       setPosts(res.data)
       if(res.data.length===0){
@@ -54,13 +54,14 @@ const Home = () => {
 <div className="px-8 md:px-[200px] min-h-[80vh]">
         {loader?<div className="h-[40vh] flex justify-center items-center"><Loader/></div>:!noResults?
         posts.map((post)=>(
+
           <>
-          <Link to={user?`/posts/post/${post._id}`:"/login"}>
+          <Link to={user?`/posts/post/${post?._id}`:"/login"}>
           <HomePosts key={post._id} post={post}/>
           </Link>
           </>
           
-        )):<h3 className="text-center font-bold mt-16">No posts available</h3>}
+        )):<h3 className="text-center font-bold mt-16">No posts available..</h3>}
     </div>
     <Footer/>
     </>

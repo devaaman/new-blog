@@ -44,11 +44,24 @@ const storage=multer.diskStorage({
     }
 })
 
-const upload=multer({storage:storage})
-app.post("/api/upload",upload.single("file"),(req,res)=>{
-    res.status(200).json("Image has been uploaded successfully!")
-})
+const cloudinary = require('./routes/cloudinary');
+const fs=require('fs');
 
+const upload=multer({storage:storage})
+app.post('/api/upload', upload.single('file'), (req, res) => {
+    try{
+        const filePath = req.file.path;
+        cloudinary.uploader.upload(filePath, (err, result) => {
+        if (err) {
+        return res.status(500).json({ error: 'Failed to upload image', details: err });
+        }
+        fs.unlinkSync(filePath);
+        res.status(200).json({ message: 'Image has been uploaded successfully!', url: result.secure_url });
+        });
+    }catch(error){
+        res.status(200).json({ error: error});
+    } 
+});
 
 app.get("/home",(req,res)=>{
     res.send("hello pat");
