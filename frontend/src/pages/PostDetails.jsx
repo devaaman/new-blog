@@ -76,10 +76,10 @@ const PostDetails = () => {
       const res=await axios.post(URL+"/api/comments/create",
       {comment:comment,author:user.username,postId:postId,userId:user._id})
       
-      // fetchPostComments()
-      // setComment("")
-      window.location.reload(true)
-
+      fetchPostComments()
+      setComment("")
+      // window.location.reload(true)
+      fetchPost();
     }
     catch(err){
          console.log(err)

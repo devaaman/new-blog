@@ -10,18 +10,28 @@ import Loader from "../components/Loader"
 
 
 const MyBlogs = () => {
-    const {search}=useLocation()
-  // console.log(search)
+    let location =useLocation()
   const [posts,setPosts]=useState([])
   const [noResults,setNoResults]=useState(false)
   const [loader,setLoader]=useState(false)
   const {user}=useContext(UserContext)
+  let searchKey = location.state?.search || null;
+
   // console.log(user)
 
   const fetchPosts=async()=>{
     setLoader(true)
     try{
-      const res=await axios.get(URL+"/api/posts/user/"+user?._id)
+      let res;
+      if(searchKey === null){
+         res=await axios.get(URL+`/api/posts/user/${user?._id}`)
+      }else{
+         res=await axios.get(URL+`/api/posts/user/${user?._id}`,{
+          params: { searchKey }
+        })
+        location.state.search = null;
+      }
+      
       // console.log(res.data)
       setPosts(res.data)
       if(res.data.length===0){
@@ -42,7 +52,7 @@ const MyBlogs = () => {
   useEffect(()=>{
     fetchPosts()
 
-  },[search])
+  },[location])
 
   return (
     <div>

@@ -34,33 +34,34 @@ app.use("/api/users",userRoute)
 app.use("/api/posts",postRoute)
 app.use("/api/comments",commentRoute)
 
-//image upload
-const storage=multer.diskStorage({
-    destination:(req,file,fn)=>{
-        fn(null,"images")
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images/')
     },
-    filename:(req,file,fn)=>{
-        fn(null,req.body.img)
+    filename: (req, file, cb) => {
+        cb(null, req.body.img)
     }
-})
+});
 
+const upload = multer({ storage: storage });
 const cloudinary = require('./routes/cloudinary');
-const fs=require('fs');
-
-const upload=multer({storage:storage})
 app.post('/api/upload', upload.single('file'), (req, res) => {
-    try{
-        const filePath = req.file.path;
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    try {
+        const filePath = path.resolve(req.file.path);
         cloudinary.uploader.upload(filePath, (err, result) => {
-        if (err) {
-        return res.status(500).json({ error: 'Failed to upload image', details: err });
-        }
-        fs.unlinkSync(filePath);
-        res.status(200).json({ message: 'Image has been uploaded successfully!', url: result.secure_url });
+            if (err) {
+                return res.status(500).json({ error: 'Failed to upload image', details: err });
+            }
+            fs.unlinkSync(filePath);
+            res.status(200).json({ message: 'Image has been uploaded successfully!', url: result.secure_url });
         });
-    }catch(error){
-        res.status(200).json({ error: error});
-    } 
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.get("/home",(req,res)=>{
