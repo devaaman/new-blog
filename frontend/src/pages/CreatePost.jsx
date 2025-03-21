@@ -11,6 +11,13 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { ToastContext } from "../context/ToastContext";
 import { toast } from 'react-toastify';
+import { cleanHtml } from '../utils/cleanHtml';
+import { preventEmptyParagraphs } from '../utils/quillFormatters';
+import EmptyBlockPreventer from '../utils/quillEmptyBlockPreventer';
+
+// Register the module with Quill
+import Quill from 'quill';
+Quill.register('modules/emptyBlockPreventer', EmptyBlockPreventer);
 
 const CreatePost = () => {
     const [title, setTitle] = useState("");
@@ -142,9 +149,12 @@ const CreatePost = () => {
         
         setLoading(true);
         
+        // Clean the HTML before submitting
+        const cleanedDesc = cleanHtml(desc);
+        
         const post = {
             title,
-            desc,
+            desc: cleanedDesc,
             username: user.username,
             userId: user._id,
             categories: cats
@@ -202,6 +212,24 @@ const CreatePost = () => {
             [{ 'color': [] }, { 'background': [] }],
             [{ 'align': [] }]
         ],
+        clipboard: {
+            matchVisual: false
+        },
+        keyboard: {
+            bindings: {
+                enter: {
+                    key: 13,
+                    handler: (range, context) => {
+                        const currentLineEmpty = context.line.trim().length === 0;
+                        if (currentLineEmpty && context.empty) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            }
+        },
+        emptyBlockPreventer: true
     };
 
     const formats = [

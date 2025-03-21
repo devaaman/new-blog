@@ -28,6 +28,14 @@ const PostSchema=new mongoose.Schema({
         type:Array,
         
     },
+    viewCount: {
+        type: Number,
+        default: 0
+    },
+    shareCount: {
+        type: Number,
+        default: 0
+    }
 },{timestamps:true})
 
 module.exports=mongoose.model("Post",PostSchema)

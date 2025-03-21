@@ -19,6 +19,7 @@ router.put("/:id",async (req,res)=>{
 
     }
     catch(err){
+        console.log(err)
         res.status(500).json(err)
     }
 })
@@ -34,6 +35,7 @@ router.delete("/:id",async (req,res)=>{
 
     }
     catch(err){
+        console.log(err)
         res.status(500).json(err)
     }
 })
@@ -50,6 +52,27 @@ router.get("/:id",async (req,res)=>{
         res.status(500).json(err)
     }
 })
+
+
+// Add a route to update user bio
+router.put("/bio/:id", verifyToken, async (req, res) => {
+  if (req.params.id === req.user.id) {
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { $set: { bio: req.body.bio } },
+        { new: true }
+      );
+      
+      const { password, ...others } = updatedUser._doc;
+      res.status(200).json(others);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(401).json("You can update only your account!");
+  }
+});
 
 
 module.exports=router

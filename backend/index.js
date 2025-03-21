@@ -10,7 +10,8 @@ const authRoute=require('./routes/auth')
 const userRoute=require('./routes/users')
 const postRoute=require('./routes/posts')
 const commentRoute=require('./routes/comments')
-
+const newsletterRoute = require("./routes/newsletter");
+const morgan = require('morgan')
 //database
 const connectDB=async()=>{
     try{
@@ -33,6 +34,8 @@ app.use("/api/auth",authRoute)
 app.use("/api/users",userRoute)
 app.use("/api/posts",postRoute)
 app.use("/api/comments",commentRoute)
+app.use("/api/newsletter", newsletterRoute);
+app.use(morgan("dev"))
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

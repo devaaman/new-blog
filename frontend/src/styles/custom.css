@@ -1,0 +1,32 @@
+/* Add this to your CSS */
+.post-content p:empty {
+  display: none;
+}
+
+.post-content p:empty + p:empty {
+  display: none;
+}
+
+/* More comprehensive rules to hide empty paragraphs */
+.prose p:empty,
+.post-content p:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+/* Handle consecutive empty paragraphs */
+.prose p:empty + p:empty,
+.post-content p:empty + p:empty {
+  display: none !important;
+}
+
+/* Handle paragraphs that only contain non-breaking spaces or line breaks */
+.prose p:has(br:only-child),
+.post-content p:has(br:only-child),
+.prose p:has(br:first-child:last-child),
+.post-content p:has(br:first-child:last-child) {
+  display: none !important;
+} 

@@ -1,0 +1,21 @@
+/* Ultimate paragraph fix */
+p:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  width: 0 !important;
+}
+
+/* Prevent display of paragraphs with only non-breaking spaces */
+p:has(text-content = '') {
+  display: none !important;
+}
+
+/* Target the specific pattern the user is seeing */
+.post-content > p:first-child:empty + p:not(:empty) {
+  margin-top: 0 !important;
+} 

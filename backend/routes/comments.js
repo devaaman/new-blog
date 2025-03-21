@@ -36,12 +36,16 @@ router.put("/:id",verifyToken,async (req,res)=>{
 //DELETE
 router.delete("/:id",verifyToken,async (req,res)=>{
     try{
-        await Comment.findByIdAndDelete(req.params.id)
-        
-        res.status(200).json("Comment has been deleted!")
-
+        const comment = await Comment.findById(req.params.id);
+        if (comment.userId === req.user.id) {
+            await Comment.findByIdAndDelete(req.params.id);
+            res.status(200).json("Comment has been deleted!");
+        } else {
+            res.status(403).json("You can delete only your comment!");
+        }
     }
     catch(err){
+        console.log(err)
         res.status(500).json(err)
     }
 })
@@ -60,5 +64,14 @@ router.get("/post/:postId",async (req,res)=>{
     }
 })
 
+// Add an endpoint to get comment count for a specific post
+router.get("/count/:postId", async (req, res) => {
+    try {
+        const count = await Comment.countDocuments({ postId: req.params.postId });
+        res.status(200).json(count);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 module.exports=router

@@ -22,6 +22,8 @@ import BackButton from "../components/BackButton"
 import ConfirmDialog from "../components/ConfirmDialog"
 import { IoArrowBack } from 'react-icons/io5'
 import { ToastContext } from "../context/ToastContext";
+import { cleanHtml } from '../utils/cleanHtml';
+import SanitizedContent from '../components/SanitizedContent';
 
 const PostDetails = () => {
   const postId = useParams().id
@@ -97,17 +99,6 @@ const PostDetails = () => {
     }
   };
 
-  const cleanHTML = (html) => {
-    if (!html) return '';
-    
-    // Remove empty paragraphs
-    let cleaned = html.replace(/<p><\/p>/g, '');
-    cleaned = cleaned.replace(/<p><br><\/p>/g, '');
-    cleaned = cleaned.replace(/<p><br\/><\/p>/g, '');
-    
-    return cleaned;
-  };
-
   if (loading) {
     return (
       <div>
@@ -168,11 +159,9 @@ const PostDetails = () => {
             <img src={post.photo} className="w-full mx-auto mt-8" alt=""/>
             
             <div className="mt-8" ref={contentRef}>
-              <div 
-                dangerouslySetInnerHTML={{ 
-                  __html: DOMPurify.sanitize(cleanHTML(post.desc)) 
-                }}
-                className="prose prose-lg max-w-none mt-6"
+              <SanitizedContent 
+                html={post.desc} 
+                className="prose prose-lg max-w-none mt-6 post-content" 
               />
             </div>
             
