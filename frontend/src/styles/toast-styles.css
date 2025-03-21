@@ -1,0 +1,27 @@
+/* Custom toast styles */
+.Toastify__toast {
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.Toastify__toast-body {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(to right, #10b981, #059669);
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(to right, #ef4444, #dc2626);
+}
+
+.Toastify__toast--warning {
+  background: linear-gradient(to right, #f59e0b, #d97706);
+}
+
+.Toastify__toast--info {
+  background: linear-gradient(to right, #6366f1, #4f46e5);
+}

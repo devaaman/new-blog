@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { URL } from "../url";
+import { toast } from 'react-toastify';
 
 export const UserContext = createContext({});
 
@@ -32,8 +33,9 @@ export function UserContextProvider({ children }) {
     };
 
     const logout = () => {
+        localStorage.removeItem("user");
         setUser(null);
-        localStorage.removeItem('user');
+        toast.info("You've been logged out successfully");
     };
 
     return (
